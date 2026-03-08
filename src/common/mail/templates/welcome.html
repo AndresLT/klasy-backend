@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light only" />
+  <title>Bienvenido a Klasy</title>
+  <style>
+    :root { color-scheme: light only; }
+    body { margin:0; padding:0; background-color:#f0f2f5 !important; font-family:Georgia,serif; }
+    .wrapper { width:100%; padding:40px 16px; background-color:#f0f2f5 !important; }
+    .card { max-width:520px; margin:0 auto; background-color:#ffffff !important; border-radius:16px; overflow:hidden; }
+    .header { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%) !important; padding:40px 40px 32px; text-align:center; }
+    .logo-placeholder { display:inline-block; background:rgba(255,255,255,0.12) !important; border:2px solid rgba(255,255,255,0.25) !important; border-radius:12px; padding:12px 24px; margin-bottom:24px; }
+    .logo-text { font-family:Georgia,serif; font-size:26px; font-weight:bold; color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; letter-spacing:4px; text-transform:uppercase; }
+    .header-subtitle { margin:0; font-family:Arial,sans-serif; font-size:13px; color:#c8d0e8 !important; -webkit-text-fill-color:#c8d0e8 !important; letter-spacing:3px; text-transform:uppercase; }
+    .accent-bar { height:4px; background:linear-gradient(90deg,#e94560,#f5a623,#e94560) !important; }
+    .body { padding:40px 40px 32px; background-color:#ffffff !important; }
+    .title { margin:0 0 8px; font-family:Georgia,serif; font-size:22px; color:#1a1a2e !important; -webkit-text-fill-color:#1a1a2e !important; font-weight:bold; }
+    .text { margin:0 0 16px; font-family:Arial,sans-serif; font-size:15px; color:#555555 !important; -webkit-text-fill-color:#555555 !important; line-height:1.7; }
+    .highlight-box { background:#f7f8fc !important; border-left:3px solid #0f3460 !important; border-radius:0 8px 8px 0; padding:16px 20px; margin-bottom:24px; }
+    .highlight-text { margin:0; font-family:Arial,sans-serif; font-size:14px; color:#1a1a2e !important; -webkit-text-fill-color:#1a1a2e !important; line-height:1.6; }
+    .divider { border:none; border-top:1px solid #eef0f6; margin:0 40px; }
+    .footer { padding:24px 40px 32px; text-align:center; background-color:#ffffff !important; }
+    .footer-text { margin:0; font-family:Arial,sans-serif; font-size:12px; color:#aaaaaa !important; -webkit-text-fill-color:#aaaaaa !important; line-height:1.7; }
+    .below-card { margin:20px 0 0; font-family:Arial,sans-serif; font-size:11px; color:#aaaaaa !important; text-align:center; }
+    @media (prefers-color-scheme: dark) {
+      .header { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%) !important; }
+      .logo-text, .header-subtitle { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+      .card, .body, .footer { background-color:#ffffff !important; }
+      .title { color:#1a1a2e !important; -webkit-text-fill-color:#1a1a2e !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="header">
+        <div class="logo-placeholder">
+          <img src="https://kbbjqzwddlkfpdfdapcj.supabase.co/storage/v1/object/public/assets/logo.png" 
+                      width="120" 
+                      alt="Klasy"
+                      style="display:block;margin:0 auto;" />
+          <span class="logo-text">KLASY</span>
+        </div>
+        <p class="header-subtitle">Plataforma Educativa</p>
+      </div>
+      <div class="accent-bar"></div>
+      <div class="body">
+        <p class="title">¡Bienvenido, {{firstName}}!</p>
+        <p class="text">
+          Tu cuenta ha sido creada exitosamente. A partir de ahora formas parte de
+          <strong>{{institutionName}}</strong> en Klasy.
+        </p>
+        <div class="highlight-box">
+          <p class="highlight-text">
+            Para iniciar sesión, ingresa tu correo electrónico en la app y recibirás
+            un código de verificación. No necesitas recordar ninguna contraseña.
+          </p>
+        </div>
+        <p class="text">
+          Si tienes alguna pregunta, contacta al administrador de tu institución.
+        </p>
+      </div>
+      <hr class="divider" />
+      <div class="footer">
+        <p class="footer-text">
+          Este mensaje fue enviado automáticamente, por favor no respondas a este correo.<br/>
+          &copy; 2026 Klasy &mdash; Todos los derechos reservados.
+        </p>
+      </div>
+    </div>
+    <p class="below-card">¿Tienes problemas para acceder? Contacta al administrador de tu institución.</p>
+  </div>
+</body>
+</html>

@@ -9,6 +9,7 @@ import { DatabaseService } from '../../database/database.service';
 import { CreateUserDto } from './dto/login.dto';
 import { ApiResponseDto } from '../../common/dto/api-response';
 import { HttpStatusCode } from '../../common/constants/http-codes';
+import { MailService } from '../../common/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,7 @@ export class AuthService {
   constructor(
     private configService: ConfigService,
     private db: DatabaseService,
+    private mailService: MailService
   ) {
     this.supabase = createClient(
       this.configService.get<string>('supabase.url') as string,
@@ -171,6 +173,19 @@ export class AuthService {
         fullName: dto.fullName,
         roleCode: dto.roleCode,
       };
+
+      // Obtener el nombre de la institución para el correo
+      const institutionResult = await this.db.query(
+        `SELECT name FROM public.institutions WHERE id = $1`,
+        [institutionId],
+      );
+
+      // Enviar correo de bienvenida (no interrumpe si falla)
+      await this.mailService.sendWelcome(
+        dto.email,
+        dto.fullName,
+        institutionResult[0]?.name || 'tu institución',
+      );
 
       return ApiResponseDto.ok(data,'Usuario creado correctamente.', HttpStatusCode.CREATED)
     } catch (error) {
