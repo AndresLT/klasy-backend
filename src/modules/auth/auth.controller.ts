@@ -47,4 +47,13 @@ export class AuthController {
       institutionId,
     );
   }
+
+  @Post('logout')
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Cerrar sesión del usuario actual' })
+  async logout(@Headers('authorization') authorization: any) {
+    const jwt = authorization.replace('Bearer ','')
+    return await this.authService.logout(jwt);
+  }
 }

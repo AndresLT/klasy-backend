@@ -75,7 +75,7 @@ export class AuthService {
       })),
     };
 
-    return ApiResponseDto.ok(data, 'Operacion exitosa', HttpStatusCode.OK)
+    return ApiResponseDto.ok('Operacion exitosa', HttpStatusCode.OK, data)
   }
 
   // Verifica que el usuario pertenece a la institución
@@ -117,7 +117,7 @@ export class AuthService {
       secondaryColor: membership.secondary_color,
     };
 
-    return ApiResponseDto.ok(data, 'Operacion exitosa', HttpStatusCode.OK)
+    return ApiResponseDto.ok('Operacion exitosa', HttpStatusCode.OK, data)
   }
 
   async createUser(
@@ -187,7 +187,7 @@ export class AuthService {
         institutionResult[0]?.name || 'tu institución',
       );
 
-      return ApiResponseDto.ok(data,'Usuario creado correctamente.', HttpStatusCode.CREATED)
+      return ApiResponseDto.ok('Usuario creado correctamente.', HttpStatusCode.CREATED, data)
     } catch (error) {
       await this.supabase.auth.admin.deleteUser(userId);
       await this.db.query(
@@ -198,6 +198,17 @@ export class AuthService {
       throw new InternalServerErrorException(
         ApiResponseDto.error('Error al guardar el usuario. La operación fue revertida.', HttpStatusCode.INTERNAL_ERROR),
       );
+    }
+  }
+
+  async logout(jwt: string) {
+    const { error } = await this.supabase.auth.admin.signOut(jwt);
+      
+    if (error) {
+      this.logger.error('Error cerrando sesión del usuario', error);
+      return ApiResponseDto.error('Error cerrando sesión del usuario', HttpStatusCode.INTERNAL_ERROR)
+    }else{
+      return ApiResponseDto.ok('Sesion cerrada', HttpStatusCode.OK)
     }
   }
 }

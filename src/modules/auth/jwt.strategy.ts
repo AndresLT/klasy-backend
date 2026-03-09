@@ -4,10 +4,13 @@ import {
   ExtractJwt,
   Strategy,
   StrategyOptionsWithoutRequest,
+  StrategyOptionsWithRequest,
 } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from '../../database/database.service';
+import { createClient } from '@supabase/supabase-js';
+import { Request } from 'express';
 
 export interface JwtPayload {
   sub: string;
@@ -21,32 +24,46 @@ export interface JwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+  private readonly supabase;
+
   constructor(
     configService: ConfigService,
     private db: DatabaseService,
   ) {
-    const options: StrategyOptionsWithoutRequest = {
+    const options: StrategyOptionsWithRequest = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      passReqToCallback: false as false,
-
-      // En lugar de un secreto estático, usamos passportJwtSecret
-      // que consulta el endpoint JWKS de Supabase para obtener
-      // la clave pública correcta automáticamente
       secretOrKeyProvider: passportJwtSecret({
-        cache: true,           // cachea la clave pública para no consultarla en cada request
-        rateLimit: true,       // limita las consultas al endpoint JWKS
+        cache: true,
+        rateLimit: true,
         jwksRequestsPerMinute: 5,
         jwksUri: configService.get<string>('jwt.jwksUri') as string,
       }),
-
-      // RS256 es el algoritmo asimétrico que usa Supabase con las nuevas signing keys
       algorithms: ['ES256'],
+      // Necesitamos el request para extraer el JWT crudo
+      passReqToCallback: true,
     };
     super(options);
+
+    this.supabase = createClient(
+      configService.get<string>('supabase.url') as string,
+      configService.get<string>('supabase.serviceKey') as string,
+    );
   }
 
-  async validate(payload: JwtPayload) {
+  async validate(req: Request, payload: JwtPayload) {
+    // Extraemos el JWT crudo del header Authorization
+    const jwt = req.headers.authorization?.replace('Bearer ', '');
+
+    // Verificamos contra Supabase si la sesión sigue activa
+    // getUser(jwt) falla si la sesión fue cerrada con logout
+    const { data, error } = await this.supabase.auth.getUser(jwt);
+
+    if (error || !data.user) {
+      throw new UnauthorizedException('Sesión inválida o expirada');
+    }
+
+    // Verificamos que el usuario existe en nuestra tabla
     const users = await this.db.query(
       `SELECT id, email, full_name, is_active
        FROM public.users

@@ -24,7 +24,7 @@ export class ApiResponseDto<T> {
   meta?: PaginationMeta;
 
   // Respuesta exitosa genérica
-  static ok<T>(data: T, message: string, statusCode = 200): ApiResponseDto<T> {
+  static ok<T>(message: string, statusCode = 200, data?: T): ApiResponseDto<T> {
     const res = new ApiResponseDto<T>();
     res.success = true;
     res.statusCode = statusCode;
