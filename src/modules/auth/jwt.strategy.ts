@@ -3,7 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import {
   ExtractJwt,
   Strategy,
-  StrategyOptionsWithoutRequest,
   StrategyOptionsWithRequest,
 } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
