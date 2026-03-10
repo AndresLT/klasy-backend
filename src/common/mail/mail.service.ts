@@ -50,6 +50,7 @@ export class MailService {
       institutionName,
     });
 
+    // Email settled by defauld beacause Resend freet tier limitations
     try {
       await this.resend.emails.send({
         from: this.from,
