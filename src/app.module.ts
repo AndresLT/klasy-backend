@@ -9,8 +9,6 @@ import jwtConfig from './config/jwt.config';
 import supabaseConfig from './config/supabase.config';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
 import { CommonModule } from './common/common.module';
 
 @Module({
